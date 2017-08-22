@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MailChimp.Net.Models;
 using Newtonsoft.Json;
 
 namespace MailChimp.Net.Core
@@ -9,7 +9,7 @@ namespace MailChimp.Net.Core
 
         public WebHookResponse()
         {
-            this.Webhooks = new HashSet<WebHook>();
+            Webhooks = new HashSet<WebHook>();
         }
 
         [JsonProperty("webhooks")]

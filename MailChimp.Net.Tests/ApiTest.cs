@@ -5,15 +5,13 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using MailChimp.Net.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace MailChimp.Net.Tests
 {
     /// <summary>
     /// The api test.
     /// </summary>
-    [TestClass]
     public class ApiTest : MailChimpTest
     {
         /// <summary>
@@ -22,11 +20,11 @@ namespace MailChimp.Net.Tests
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
-        [TestMethod]
+        [Fact]
         public async Task Should_Return_API_Information()
         {
-            var apiInfo = await this._mailChimpManager.Api.GetInfoAsync();
-            Assert.IsNotNull(apiInfo);
+            var apiInfo = await this.MailChimpManager.Api.GetInfoAsync();
+            Assert.NotNull(apiInfo);
         }
     }
 }

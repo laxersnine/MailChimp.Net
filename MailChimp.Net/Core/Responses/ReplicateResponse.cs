@@ -2,9 +2,6 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MailChimp.Net.Core
 {
@@ -13,7 +10,7 @@ namespace MailChimp.Net.Core
     {
         public ReplicateResponse()
         {
-            this.Links = new HashSet<Link>();
+            Links = new HashSet<Link>();
         }
 
         [JsonProperty("id")]

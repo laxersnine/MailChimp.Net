@@ -4,14 +4,11 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using static System.Net.Http.HttpContentExtensions;
-using System.Threading.Tasks;
-
 using MailChimp.Net.Core;
 using MailChimp.Net.Interfaces;
 using MailChimp.Net.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 #pragma warning disable 1584,1711,1572,1581,1580
 
 namespace MailChimp.Net.Logic
@@ -22,7 +19,7 @@ namespace MailChimp.Net.Logic
     internal class ListLogic : BaseLogic, IListLogic
     {
 
-        public ListLogic(IMailChimpConfiguration mailChimpConfiguration)
+        public ListLogic(MailchimpOptions mailChimpConfiguration)
             : base(mailChimpConfiguration)
         {
         }
@@ -46,7 +43,7 @@ namespace MailChimp.Net.Logic
         /// </exception>
         public async Task<List> AddOrUpdateAsync(List list)
         {
-            using (var client = this.CreateMailClient("lists/"))
+            using (var client = CreateMailClient("lists/"))
             {
                 System.Net.Http.HttpResponseMessage response;
                 if (string.IsNullOrWhiteSpace(list.Id))
@@ -84,7 +81,7 @@ namespace MailChimp.Net.Logic
         /// </exception>
         public async Task DeleteAsync(string listId)
         {
-            using (var client = this.CreateMailClient("lists/"))
+            using (var client = CreateMailClient("lists/"))
             {
                 var response = await client.DeleteAsync(listId).ConfigureAwait(false);
                 await response.EnsureSuccessMailChimpAsync().ConfigureAwait(false);
@@ -140,12 +137,12 @@ namespace MailChimp.Net.Logic
         {
             request =  request ?? new ListRequest
             {
-                Limit = base._limit
+                Limit = _limit
             };
 
-            using (var client = this.CreateMailClient("lists"))
+            using (var client = CreateMailClient("lists"))
             {
-                var response = await client.GetAsync(request?.ToQueryString()).ConfigureAwait(false);
+                var response = await client.GetAsync(request.ToQueryString()).ConfigureAwait(false);
                 await response.EnsureSuccessMailChimpAsync().ConfigureAwait(false);
 
                 var listResponse = await response.Content.ReadAsAsync<ListResponse>().ConfigureAwait(false);
@@ -173,7 +170,7 @@ namespace MailChimp.Net.Logic
         /// </exception>
         public async Task<List> GetAsync(string id)
         {
-            using (var client = this.CreateMailClient("lists/"))
+            using (var client = CreateMailClient("lists/"))
             {
                 var response = await client.GetAsync($"{id}").ConfigureAwait(false);
                 await response.EnsureSuccessMailChimpAsync().ConfigureAwait(false);

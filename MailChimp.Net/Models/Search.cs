@@ -1,9 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MailChimp.Net.Models
 {
@@ -11,8 +7,8 @@ namespace MailChimp.Net.Models
     {
         public CampaignSearchResult()
         {
-            this.Results = new List<Result>();
-            this.Links = new List<Link>();
+            Results = new List<Result>();
+            Links = new List<Link>();
         }
 
         [JsonProperty("results")]

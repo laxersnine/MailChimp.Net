@@ -4,14 +4,11 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using static System.Net.Http.HttpContentExtensions;
-using System.Threading.Tasks;
-
 using MailChimp.Net.Core;
 using MailChimp.Net.Interfaces;
 using MailChimp.Net.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 #pragma warning disable 1584,1711,1572,1581,1580
 
 namespace MailChimp.Net.Logic
@@ -22,7 +19,7 @@ namespace MailChimp.Net.Logic
     public class AbuseReportLogic : BaseLogic, IAbuseReportLogic
     {
 
-        public AbuseReportLogic(IMailChimpConfiguration mailChimpConfiguration)
+        public AbuseReportLogic(MailchimpOptions mailChimpConfiguration)
             : base(mailChimpConfiguration)
         {
         }
@@ -82,14 +79,14 @@ namespace MailChimp.Net.Logic
         public async Task<AbuseReportResponse> GetResponseAsync(string listId, QueryableBaseRequest request = null)
         {
 
-            request = new QueryableBaseRequest
+            request = request ?? new QueryableBaseRequest
             {
-                Limit = base._limit
+                Limit = _limit
             };
 
-            using (var client = this.CreateMailClient("lists/"))
+            using (var client = CreateMailClient("lists/"))
             {
-                var response = await client.GetAsync($"{listId}/abuse-reports{request?.ToQueryString()}").ConfigureAwait(false);
+                var response = await client.GetAsync($"{listId}/abuse-reports{request.ToQueryString()}").ConfigureAwait(false);
                 await response.EnsureSuccessMailChimpAsync().ConfigureAwait(false);
 
                 var appResponse = await response.Content.ReadAsAsync<AbuseReportResponse>().ConfigureAwait(false);
@@ -126,7 +123,7 @@ namespace MailChimp.Net.Logic
         /// </exception>
         public async Task<AbuseReport> GetAsync(string listId, string reportId, QueryableBaseRequest request = null)
         {
-            using (var client = this.CreateMailClient("lists/"))
+            using (var client = CreateMailClient("lists/"))
             {
                 var response = await client.GetAsync($"{listId}/abuse-reports{reportId}{request?.ToQueryString()}").ConfigureAwait(false);
                 await response.EnsureSuccessMailChimpAsync().ConfigureAwait(false);

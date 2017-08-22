@@ -1,9 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MailChimp.Net.Models
 {
@@ -12,7 +8,7 @@ namespace MailChimp.Net.Models
     {
         public MemberSearchResult()
         {
-            this.Links = new HashSet<Link>();
+            Links = new HashSet<Link>();
         }
 
         [JsonProperty("exact_matches")]

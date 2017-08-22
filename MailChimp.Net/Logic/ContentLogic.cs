@@ -4,13 +4,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using static System.Net.Http.HttpContentExtensions;
-using System.Threading.Tasks;
-
 using MailChimp.Net.Core;
 using MailChimp.Net.Interfaces;
 using MailChimp.Net.Models;
+using System.Threading.Tasks;
 #pragma warning disable 1584,1711,1572,1581,1580
 
 namespace MailChimp.Net.Logic
@@ -21,7 +18,7 @@ namespace MailChimp.Net.Logic
     internal class ContentLogic : BaseLogic, IContentLogic
     {
 
-        public ContentLogic(IMailChimpConfiguration mailChimpConfiguration)
+        public ContentLogic(MailchimpOptions mailChimpConfiguration)
             : base(mailChimpConfiguration)
         {
         }
@@ -48,9 +45,9 @@ namespace MailChimp.Net.Logic
         /// </exception>
         public async Task<Content> AddOrUpdateAsync(string campaignId, ContentRequest content)
         {
-            using (var client = this.CreateMailClient("campaigns/"))
+            using (var client = CreateMailClient("campaigns/"))
             {
-                var response = await client.PutAsJsonAsync($"{campaignId}/content", content, null).ConfigureAwait(false);
+                var response = await client.PutAsJsonAsync($"{campaignId}/content", content).ConfigureAwait(false);
                 await response.EnsureSuccessMailChimpAsync().ConfigureAwait(false);
 
                 return await response.Content.ReadAsAsync<Content>().ConfigureAwait(false);
@@ -76,7 +73,7 @@ namespace MailChimp.Net.Logic
         /// </exception>
         public async Task<Content> GetAsync(string campaignId)
         {
-            using (var client = this.CreateMailClient("campaigns/"))
+            using (var client = CreateMailClient("campaigns/"))
             {
                 var response = await client.GetAsync($"{campaignId}/content").ConfigureAwait(false);
                 await response.EnsureSuccessMailChimpAsync().ConfigureAwait(false);

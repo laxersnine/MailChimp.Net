@@ -1,27 +1,25 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MailChimp.Net.Core;
 using MailChimp.Net.Interfaces;
 using MailChimp.Net.Models;
-using static System.Net.Http.HttpContentExtensions;
 
 namespace MailChimp.Net.Logic
 {
     internal class ECommerceProductVarianceLogic : BaseLogic, IECommerceProductVarianceLogic
     {
-        public string BaseUrl => $"ecommerce/stores/{this.StoreId}/products/{this.ProductId}/variants";
+        public string BaseUrl => $"ecommerce/stores/{StoreId}/products/{ProductId}/variants";
 
         public string ProductId { get; set; }
 
-        public ECommerceProductVarianceLogic(IMailChimpConfiguration mailChimpConfiguration)
+        public ECommerceProductVarianceLogic(MailchimpOptions mailChimpConfiguration)
             : base(mailChimpConfiguration)
         {
         }
 
         public async Task<Variant> AddAsync(Variant variant)
         {
-            using (var client = CreateMailClient(this.BaseUrl))
+            using (var client = CreateMailClient(BaseUrl))
             {
                 var response = await client.PostAsJsonAsync(string.Empty, variant).ConfigureAwait(false);
                 await response.EnsureSuccessMailChimpAsync().ConfigureAwait(false);
@@ -43,7 +41,6 @@ namespace MailChimp.Net.Logic
         /// <summary>
         /// Gets only the carts from the response object
         /// </summary>
-        /// <param name="storeId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         public async Task<IEnumerable<Variant>> GetAllAsync(QueryableBaseRequest request = null)
@@ -54,9 +51,7 @@ namespace MailChimp.Net.Logic
         /// <summary>
         /// The get async.
         /// </summary>
-        /// <param name="storeId">
-        /// The store id.
-        /// </param>
+        /// <param name="variantId"></param>
         /// <param name="request">
         /// The request.
         /// </param>
@@ -88,14 +83,14 @@ namespace MailChimp.Net.Logic
         public async Task<ProductVariantResponse> GetResponseAsync(QueryableBaseRequest request = null)
         {
 
-            request = new QueryableBaseRequest
+            request = request ?? new QueryableBaseRequest
             {
-                Limit = base._limit
+                Limit = _limit
             };
 
             using (var client = CreateMailClient(BaseUrl))
             {
-                var response = await client.GetAsync(request?.ToQueryString()).ConfigureAwait(false);
+                var response = await client.GetAsync(request.ToQueryString()).ConfigureAwait(false);
                 await response.EnsureSuccessMailChimpAsync().ConfigureAwait(false);
 
                 var variantResponse = await response.Content.ReadAsAsync<ProductVariantResponse>().ConfigureAwait(false);
@@ -106,12 +101,6 @@ namespace MailChimp.Net.Logic
         /// <summary>
         /// The update async.
         /// </summary>
-        /// <param name="storeId">
-        /// The store id.
-        /// </param>
-        /// <param name="store">
-        /// The store.
-        /// </param>
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>

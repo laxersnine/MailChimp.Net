@@ -4,8 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Configuration;
-using MailChimp.Net.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace MailChimp.Net.Core
 {
@@ -14,7 +13,7 @@ namespace MailChimp.Net.Core
     /// </summary>
     public abstract class MailManagerBase
     {
-        protected IMailChimpConfiguration _mailChimpConfiguration;
+        protected readonly MailchimpOptions MailchimpOptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MailManagerBase"/> class.
@@ -24,7 +23,7 @@ namespace MailChimp.Net.Core
         /// </param>
         protected MailManagerBase(string apiKey)
         {
-            _mailChimpConfiguration = new MailChimpConfiguration()
+            MailchimpOptions = new MailchimpOptions
             {
                 ApiKey = apiKey,
             };
@@ -34,11 +33,11 @@ namespace MailChimp.Net.Core
         /// Initializes a new instance of the <see cref="MailManagerBase"/> class.
         /// </summary>
         /// <param name="mailChimpConfiguration">
-        /// IMailChimpConfiguration.
+        /// MailchimpOptions.
         /// </param>
-        protected MailManagerBase(IMailChimpConfiguration mailChimpConfiguration)
+        protected MailManagerBase(IOptions<MailchimpOptions> optionsAccessor)
         {
-            _mailChimpConfiguration = mailChimpConfiguration;
+            MailchimpOptions = optionsAccessor.Value;
         }
 
         /// <summary>

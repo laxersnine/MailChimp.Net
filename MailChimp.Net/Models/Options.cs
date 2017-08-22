@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace MailChimp.Net.Models
@@ -9,7 +8,7 @@ namespace MailChimp.Net.Models
     {
         public Options()
         {
-            this.Choices = new HashSet<string>();
+            Choices = new HashSet<string>();
         }
 
         [JsonProperty("size")]

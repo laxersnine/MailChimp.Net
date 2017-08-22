@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace MailChimp.Net.Models
 {
@@ -10,9 +9,9 @@ namespace MailChimp.Net.Models
 
 		public MergeField()
 		{
-			this.Links = new HashSet<Link>();
-			this.HelpText = string.Empty;
-			this.DefaultValue = string.Empty;
+			Links = new HashSet<Link>();
+			HelpText = string.Empty;
+			DefaultValue = string.Empty;
 		}
 
 		[JsonProperty("merge_id")]

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using MailChimp.Net.Core;
 
@@ -10,8 +9,8 @@ namespace MailChimp.Net.Models
 
         public Order()
         {
-            this.Lines = new List<Line>();
-            this.Links = new List<Link>();
+            Lines = new List<Line>();
+            Links = new List<Link>();
         }
 
         [JsonProperty("id")]

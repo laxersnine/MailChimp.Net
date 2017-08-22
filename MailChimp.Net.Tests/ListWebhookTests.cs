@@ -2,11 +2,10 @@
 using FluentAssertions;
 using MailChimp.Net.Core;
 using MailChimp.Net.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace MailChimp.Net.Tests
 {
-    [TestClass]
     public class ListWebhookTests : MailChimpTest
     {
         private const string ListName = "TestListWebhooks";
@@ -14,13 +13,13 @@ namespace MailChimp.Net.Tests
 
         internal override async Task RunBeforeTestFixture()
         {
-            await ClearLists(ListName);
+            await ClearLists(ListName).ConfigureAwait(false);
 
-            var list = await _mailChimpManager.Lists.AddOrUpdateAsync(GetMailChimpList(ListName));
+            var list = await MailChimpManager.Lists.AddOrUpdateAsync(GetMailChimpList(ListName)).ConfigureAwait(false);
             _listId = list.Id;
         }
-
-        [TestMethod]
+        
+        [Fact]
         public async Task Should_Create_Webhook()
         {
             // Arrange
@@ -45,8 +44,8 @@ namespace MailChimp.Net.Tests
             };
 
             // Act
-            var response = await _mailChimpManager.WebHooks.AddAsync(_listId, webhook);
-            var existingWebhook = await _mailChimpManager.WebHooks.GetAsync(_listId, response.Id);
+            var response = await MailChimpManager.WebHooks.AddAsync(_listId, webhook).ConfigureAwait(false);
+            var existingWebhook = await MailChimpManager.WebHooks.GetAsync(_listId, response.Id).ConfigureAwait(false);
 
             // Assert
             response.Id.Should().NotBeEmpty();

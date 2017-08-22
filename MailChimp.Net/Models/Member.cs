@@ -19,11 +19,11 @@ namespace MailChimp.Net.Models
 	{
         public Member()
         {
-            this.MergeFields = new Dictionary<string, object>();
-            this.Links = new List<Link>();
-            this.Interests = new Dictionary<string, bool>();
-            this.Status = Status.Undefined;
-            this.StatusIfNew = Status.Pending;            
+            MergeFields = new Dictionary<string, object>();
+            Links = new List<Link>();
+            Interests = new Dictionary<string, bool>();
+            Status = Status.Undefined;
+            StatusIfNew = Status.Pending;            
         }
 
 		/// <summary>
@@ -131,8 +131,10 @@ namespace MailChimp.Net.Models
 
         [JsonProperty("status_if_new")]
  		[JsonConverter(typeof(StringEnumDescriptionConverter))]
-        /// Sets the new member's status.  To update the status of an existing member use the <see cref="Status"/> property.  Default value is <see cref="Status.Pending"/>  
- 		public Status StatusIfNew { get; set; }
+        public Status StatusIfNew { get; set; }
+
+        [JsonProperty("unsubscribe_reason")]
+        public string UnsubscribeReason { get; set; }
 
         /// <summary>
         /// Gets or sets the timestamp opt.

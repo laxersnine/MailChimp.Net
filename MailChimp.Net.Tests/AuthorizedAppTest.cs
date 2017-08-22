@@ -6,14 +6,13 @@
 
 using System.Threading.Tasks;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace MailChimp.Net.Tests
 {
     /// <summary>
     /// The authorized app test.
     /// </summary>
-    [TestClass]
     public class AuthorizedAppTest : MailChimpTest
     {
         /// <summary>
@@ -22,15 +21,12 @@ namespace MailChimp.Net.Tests
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
-        [TestMethod]
+        [Fact]
         public async Task Should_Return_App_Information()
         {
-            var apiInfo = await this._mailChimpManager.Apps.GetAllAsync();
-            apiInfo = await this._mailChimpManager.Configure(new MailChimpConfiguration
-            {
-                Limit = 100000
-            }).Apps.GetAllAsync();
-            Assert.IsNotNull(apiInfo);
+            var apiInfo = await this.MailChimpManager.Apps.GetAllAsync();
+            apiInfo = await this.MailChimpManager.Configure((mo) => mo.Limit = 100000).Apps.GetAllAsync();
+            Assert.NotNull(apiInfo);
         }
     }
 }

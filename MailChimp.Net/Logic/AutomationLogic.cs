@@ -4,14 +4,11 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using static System.Net.Http.HttpContentExtensions;
-using System.Threading.Tasks;
-
 using MailChimp.Net.Core;
 using MailChimp.Net.Interfaces;
 using MailChimp.Net.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 #pragma warning disable 1584,1711,1572,1581,1580
 
 namespace MailChimp.Net.Logic
@@ -22,7 +19,7 @@ namespace MailChimp.Net.Logic
     internal class AutomationLogic : BaseLogic, IAutomationLogic
     {
 
-        public AutomationLogic(IMailChimpConfiguration mailChimpConfiguration)
+        public AutomationLogic(MailchimpOptions mailChimpConfiguration)
             : base(mailChimpConfiguration)
         {
         }
@@ -49,7 +46,7 @@ namespace MailChimp.Net.Logic
         /// <exception cref="TypeLoadException">A custom attribute type cannot be loaded. </exception>
         public async Task<IEnumerable<Automation>> GetAllAsync(QueryableBaseRequest request = null)
         {
-            return (await this.GetResponseAsync(request).ConfigureAwait(false))?.Automations;
+            return (await GetResponseAsync(request).ConfigureAwait(false))?.Automations;
         }
 
 
@@ -75,14 +72,14 @@ namespace MailChimp.Net.Logic
         /// <exception cref="TypeLoadException">A custom attribute type cannot be loaded. </exception>
         public async Task<AutomationResponse> GetResponseAsync(QueryableBaseRequest request = null)
         {
-            request = new QueryableBaseRequest
+            request = request ?? new QueryableBaseRequest
             {
-                Limit = base._limit
+                Limit = _limit
             };
 
-            using (var client = this.CreateMailClient("automations"))
+            using (var client = CreateMailClient("automations"))
             {
-                var response = await client.GetAsync(request?.ToQueryString()).ConfigureAwait(false);
+                var response = await client.GetAsync(request.ToQueryString()).ConfigureAwait(false);
                 await response.EnsureSuccessMailChimpAsync().ConfigureAwait(false);
                 var automationResponse = await response.Content.ReadAsAsync<AutomationResponse>().ConfigureAwait(false);
                 return automationResponse;
@@ -109,7 +106,7 @@ namespace MailChimp.Net.Logic
         /// </exception>
         public async Task<Automation> GetAsync(string workflowId)
         {
-            using (var client = this.CreateMailClient("automations/"))
+            using (var client = CreateMailClient("automations/"))
             {
                 var response = await client.GetAsync(workflowId).ConfigureAwait(false);
                 await response.EnsureSuccessMailChimpAsync().ConfigureAwait(false);
@@ -136,7 +133,7 @@ namespace MailChimp.Net.Logic
         /// </exception>
         public async Task PauseAsync(string workflowId)
         {
-            using (var client = this.CreateMailClient("automations/"))
+            using (var client = CreateMailClient("automations/"))
             {
                 var response = await client.GetAsync($"{workflowId}/actions/pause-all-emails").ConfigureAwait(false);
                 await response.EnsureSuccessMailChimpAsync().ConfigureAwait(false);
@@ -162,7 +159,7 @@ namespace MailChimp.Net.Logic
         /// </exception>
         public async Task StartAsync(string workflowId)
         {
-            using (var client = this.CreateMailClient("automations/"))
+            using (var client = CreateMailClient("automations/"))
             {
                 var response = await client.GetAsync($"{workflowId}/actions/start-all-emails").ConfigureAwait(false);
                 await response.EnsureSuccessMailChimpAsync().ConfigureAwait(false);

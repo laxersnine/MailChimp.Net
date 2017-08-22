@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MailChimp.Net.Models;
 using Newtonsoft.Json;
 
@@ -10,7 +9,7 @@ namespace MailChimp.Net.Core
 
         public StoreCustomerResponse()
         {
-            this.Customers = new List<Customer>();
+            Customers = new List<Customer>();
         }
 
         [JsonProperty("store_id")]

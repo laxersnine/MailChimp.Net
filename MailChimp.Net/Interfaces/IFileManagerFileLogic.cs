@@ -4,16 +4,14 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-
 namespace MailChimp.Net.Interfaces
 {
     using System.Collections.Generic;
     using System.IO;
     using System.Threading.Tasks;
 
-    using MailChimp.Net.Core;
-    using MailChimp.Net.Models;
+    using Core;
+    using Models;
 
     /// <summary>
     /// The FileManagerFileLogic interface.

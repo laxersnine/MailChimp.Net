@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using MailChimp.Net.Core;
 using MailChimp.Net.Interfaces;
 using MailChimp.Net.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace MailChimp.Net.Tests
 {
@@ -23,7 +23,7 @@ namespace MailChimp.Net.Tests
         /// <summary>
         /// The _mail chimp manager.
         /// </summary>
-        protected IMailChimpManager _mailChimpManager;
+        protected IMailChimpManager MailChimpManager;
 
         internal List GetMailChimpList(string listName = "TestList") => new List
         {
@@ -49,38 +49,38 @@ namespace MailChimp.Net.Tests
 
         internal async Task ClearLists(params string[] listToDeleteNames)
         {
-            var lists = await _mailChimpManager.Lists.GetAllAsync();
+            var lists = await MailChimpManager.Lists.GetAllAsync().ConfigureAwait(false);
             var listsToDelete = listToDeleteNames.Any()
-                ? lists.Where(i => listToDeleteNames.Contains(i.Name, StringComparer.InvariantCultureIgnoreCase))
+                ? lists.Where(i => listToDeleteNames.Contains(i.Name, StringComparer.OrdinalIgnoreCase))
                 : lists;
 
-            await Task.WhenAll(listsToDelete.Select(x => _mailChimpManager.Lists.DeleteAsync(x.Id)));
+            await Task.WhenAll(listsToDelete.Select(x => MailChimpManager.Lists.DeleteAsync(x.Id))).ConfigureAwait(false);
         }
 
-        internal async Task ClearCampaigns()
+        private async Task ClearCampaigns()
         {
-            var campaigns = await this._mailChimpManager.Campaigns.GetAllAsync();
-            await Task.WhenAll(campaigns.Select(x => _mailChimpManager.Campaigns.DeleteAsync(x.Id)));
+            var campaigns = await this.MailChimpManager.Campaigns.GetAllAsync().ConfigureAwait(false);
+            await Task.WhenAll(campaigns.Select(x => MailChimpManager.Campaigns.DeleteAsync(x.Id))).ConfigureAwait(false);
         }
 
         internal async Task ClearMailChimpAsync()
         {
-            await ClearLists();
-            await ClearCampaigns();
+            await ClearLists().ConfigureAwait(false);
+            await ClearCampaigns().ConfigureAwait(false);
         }
 
         /// <summary>
         /// The initialize.
         /// </summary>
-        [TestInitialize]
-        public void Initialize()
+        public MailChimpTest()
         {
-            this._mailChimpManager = new MailChimpManager();
+            this.MailChimpManager = new MailChimpManager(null);
             RunBeforeTestFixture().Wait();
         }
 
-        internal virtual async Task RunBeforeTestFixture()
+        internal virtual Task RunBeforeTestFixture()
         {
+            return Task.CompletedTask;
         }
 
         /// <summary>
